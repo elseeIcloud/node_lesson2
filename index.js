@@ -15,11 +15,23 @@ async function fetchDataAndSaveToFile() {
     }
 }
 
+// Функция для обработки запросов к серверу
+function requestHandler(req, res) {
+    if (req.url === '/') {
+        // Вызываем функцию fetchDataAndSaveToFile при запросе к корневому маршруту
+        fetchDataAndSaveToFile();
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('Данные загружаются и сохраняются в файл data.json...');
+    } else {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Страница не найдена');
+    }
+}
+
 // Создаем HTTP-сервер и слушаем порт 3000
-const server = http.createServer();
+const server = http.createServer(requestHandler);
 
 server.listen(3000, () => {
     console.log('Сервер запущен на порту 3000');
-    fetchDataAndSaveToFile();
 });
 
